@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b68342cddd16e8241bf0404049511da8, type: 3}
+  m_Name: Event_TreasureChest_Golden
+  m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Data.Events.TreasureChestEventSO
+  _chestId: CHEST_GOLDEN_01
+  _chestName: "\uACE0\uB300\uC758 \uD669\uAE08 \uC0C1\uC790"
+  _itemReward: "\uC5D8\uB9AD\uC11C (Elixir)"
+  _goldReward: 250

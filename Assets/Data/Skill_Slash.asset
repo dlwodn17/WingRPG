@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 974bf59f56d96d54e979b002c9519c87, type: 3}
+  m_Name: Skill_Slash
+  m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Data.AttackSkill
+  skillId: SKILL_SLASH
+  skillName: "\uCC38\uACA9 (Slash)"
+  description: "\uB2E8\uC77C \uB300\uC0C1\uC744 \uD5A5\uD55C \uC815\uBC00\uD55C \uBCA0\uAE30. \uAE30\uBCF8 \uB300\uBBF8\uC9C0 15 + D20 \uB208\uAE08 * 2.0"
+  baseDamage: 15
+  scaleMultiplier: 2
+  hitCount: 1

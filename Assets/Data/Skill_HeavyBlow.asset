@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 974bf59f56d96d54e979b002c9519c87, type: 3}
+  m_Name: Skill_HeavyBlow
+  m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Data.AttackSkill
+  skillId: SKILL_HEAVY
+  skillName: "\uACB0\uC804 \uAC15\uD0C0 (Heavy Blow)"
+  description: "\uBAA8\uB4E0 \uD798\uC744 \uC2E4\uC740 \uD68C\uC2EC\uC758 \uC77C\uACA9. \uAE30\uBCF8 \uB300\uBBF8\uC9C0 25 + D20 \uB208\uAE08 * 3.5"
+  baseDamage: 25
+  scaleMultiplier: 3.5
+  hitCount: 1

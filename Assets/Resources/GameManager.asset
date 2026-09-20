@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5556a7869b150ca4b9d535f911fec604, type: 3}
+  m_Name: GameManager
+  m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Data.GameManager
+  _explorationSceneName: ExplorationScene
+  _battleSceneName: SampleScene
+  _savedPlayerPosition: {x: 0, y: 0, z: 0}
+  _hasSavedPosition: 0
+  _currentGold: 100
+  _inventoryItems: []
+  _defeatedEncounterIds: 
+  _defeatedEnemyIDs: []
+  _triggeredEventIds: []
