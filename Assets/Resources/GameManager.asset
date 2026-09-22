@@ -19,5 +19,6 @@ MonoBehaviour:
   _currentGold: 100
   _inventoryItems: []
   _defeatedEncounterIds: 
-  _defeatedEnemyIDs: []
+  CurrentEngagedEnemyID: 
+  DefeatedEnemyIDs: []
   _triggeredEventIds: []

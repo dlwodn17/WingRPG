@@ -28,8 +28,24 @@ namespace RPG25D.Gameplay.Exploration
         public int EncounterId => _encounterId;
         public string SymbolId
         {
-            get => !string.IsNullOrEmpty(_symbolId) ? _symbolId : (_encounterId > 0 ? $"Symbol_Enemy_{_encounterId}" : gameObject.name);
-            set => _symbolId = value;
+            get
+            {
+                var enemySymbol = GetComponent<EnemySymbol>();
+                if (enemySymbol != null && !string.IsNullOrEmpty(enemySymbol.EnemyID))
+                {
+                    return enemySymbol.EnemyID;
+                }
+                return !string.IsNullOrEmpty(_symbolId) ? _symbolId : (_encounterId > 0 ? $"Symbol_Enemy_{_encounterId}" : gameObject.name);
+            }
+            set
+            {
+                _symbolId = value;
+                var enemySymbol = GetComponent<EnemySymbol>();
+                if (enemySymbol != null)
+                {
+                    enemySymbol.EnemyID = value;
+                }
+            }
         }
         public string MonsterName => _monsterName;
         public float TriggerRadius => _triggerRadius;
@@ -42,12 +58,22 @@ namespace RPG25D.Gameplay.Exploration
             if (!string.IsNullOrEmpty(symbolId))
             {
                 _symbolId = symbolId;
+                var enemySymbol = GetComponent<EnemySymbol>();
+                if (enemySymbol != null)
+                {
+                    enemySymbol.EnemyID = symbolId;
+                }
             }
         }
 
         private void Awake()
         {
             _originPosition = transform.position;
+            var enemySymbol = GetComponent<EnemySymbol>();
+            if (enemySymbol != null && string.IsNullOrEmpty(enemySymbol.EnemyID) && !string.IsNullOrEmpty(_symbolId))
+            {
+                enemySymbol.EnemyID = _symbolId;
+            }
         }
 
         private void Start()
@@ -56,15 +82,21 @@ namespace RPG25D.Gameplay.Exploration
         }
 
         /// <summary>
-        /// GameManager의 처치 목록(DefeatedEnemyIDs)을 조회하여 이미 처치된 심볼이면 비활성화합니다.
+        /// GameManagerData의 처치 목록(DefeatedEnemyIDs)을 조회하여 이미 처치된 심볼이면 비활성화합니다.
         /// </summary>
         public void CheckDefeatedState()
         {
-            if (GameManager.Instance != null)
+            var enemySymbol = GetComponent<EnemySymbol>();
+            if (enemySymbol != null && enemySymbol.CheckDefeatedState())
             {
-                bool isDefeated = GameManager.Instance.IsEncounterDefeated(SymbolId) ||
-                                  GameManager.Instance.IsEncounterDefeated(_encounterId) ||
-                                  (GameManager.Instance.DefeatedEnemyIDs != null && GameManager.Instance.DefeatedEnemyIDs.Contains(SymbolId));
+                return;
+            }
+
+            if (GameManagerData.Instance != null)
+            {
+                bool isDefeated = GameManagerData.Instance.IsEnemyDefeated(SymbolId) ||
+                                  GameManagerData.Instance.IsEncounterDefeated(_encounterId) ||
+                                  (GameManagerData.Instance.DefeatedEnemyIDs != null && GameManagerData.Instance.DefeatedEnemyIDs.Contains(SymbolId));
 
                 if (isDefeated)
                 {

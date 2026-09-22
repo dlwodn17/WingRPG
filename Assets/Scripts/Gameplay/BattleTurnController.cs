@@ -96,13 +96,13 @@ namespace RPG25D.Gameplay
 
         public string TriggeringEnemyID
         {
-            get => !string.IsNullOrEmpty(_triggeringEnemyID) ? _triggeringEnemyID : (GameManager.Instance != null ? GameManager.Instance.CurrentEnemyID : string.Empty);
+            get => !string.IsNullOrEmpty(_triggeringEnemyID) ? _triggeringEnemyID : (GameManagerData.Instance != null ? GameManagerData.Instance.CurrentEngagedEnemyID : string.Empty);
             set => _triggeringEnemyID = value;
         }
 
         public int TriggeringEncounterId
         {
-            get => _triggeringEncounterId >= 0 ? _triggeringEncounterId : (GameManager.Instance != null ? GameManager.Instance.LastEncounterId : -1);
+            get => _triggeringEncounterId >= 0 ? _triggeringEncounterId : (GameManagerData.Instance != null ? GameManagerData.Instance.LastEncounterId : -1);
             set => _triggeringEncounterId = value;
         }
 
@@ -467,33 +467,42 @@ namespace RPG25D.Gameplay
         }
 
         /// <summary>
-        /// [요구 산출물 3] 적 처치 데이터 기록:
-        /// 전투 승리 시, 현재 전투를 유발한 적 심볼의 고유 ID를 GameManagerData.DefeatedEnemyIDs에 기록합니다.
+        /// [세부 개발 명세 3] 적 처치 확정 연동:
+        /// 전투 승리(BATTLE_VICTORY) 확정 시, GameManagerData의 CurrentEngagedEnemyID를 DefeatedEnemyIDs 목록에 추가(기록)합니다.
         /// </summary>
         public void RecordBattleVictory()
         {
-            if (GameManager.Instance == null) return;
+            if (GameManagerData.Instance == null) return;
 
-            string idToRecord = TriggeringEnemyID;
+            string idToRecord = !string.IsNullOrEmpty(TriggeringEnemyID)
+                ? TriggeringEnemyID
+                : GameManagerData.Instance.CurrentEngagedEnemyID;
+
             if (!string.IsNullOrEmpty(idToRecord))
             {
-                GameManager.Instance.MarkEncounterDefeated(idToRecord);
+                GameManagerData.Instance.RecordDefeatedEnemy(idToRecord);
                 Debug.Log($"[BattleTurnController] 📝 처치 적 심볼 ID 기록 완료: {idToRecord}");
             }
 
             int encId = TriggeringEncounterId;
-            if (encId >= 0)
+            if (encId >= 0 && GameManager.Instance != null)
             {
                 GameManager.Instance.MarkEncounterDefeated(encId);
             }
         }
 
         /// <summary>
-        /// [요구 산출물 1] 전투 승리 후 탐색 씬(Level01_Exploration)으로 비동기 로드 복귀합니다.
+        /// [세부 개발 명세 3] 탐색 씬 복귀 전 CurrentEngagedEnemyID를 클리어 처리하고 Level01_Exploration으로 비동기 로드 복귀합니다.
         /// </summary>
         public void ReturnToExploration(string sceneName = "Level01_Exploration")
         {
             RecordBattleVictory();
+
+            // 탐색 씬 복귀 전 CurrentEngagedEnemyID는 클리어 처리
+            if (GameManagerData.Instance != null)
+            {
+                GameManagerData.Instance.CurrentEngagedEnemyID = string.Empty;
+            }
 
             Debug.Log($"[BattleTurnController] 🗺️ 탐색 씬 '{sceneName}'(으)로 복귀 로드 시작");
 

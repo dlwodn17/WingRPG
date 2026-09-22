@@ -32,6 +32,51 @@ namespace RPG25D.Editor
             BuildExplorationScene();
         }
 
+        [MenuItem("Tools/RPG25D/Attach EnemySymbol to Scene Objects")]
+        public static void AttachEnemySymbolsToScenesMenu()
+        {
+            AttachEnemySymbolsToScene(ScenePath);
+            AttachEnemySymbolsToScene(LegacyScenePath);
+        }
+
+        public static void AttachEnemySymbolsToScene(string scenePath)
+        {
+            if (!File.Exists(scenePath))
+            {
+                Debug.LogWarning($"[ExplorationSceneBuilder] 씬 파일이 존재하지 않습니다: {scenePath}");
+                return;
+            }
+
+            var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+            var rootObjects = scene.GetRootGameObjects();
+            int attachedCount = 0;
+
+            foreach (var root in rootObjects)
+            {
+                var actors = root.GetComponentsInChildren<EnemySymbolActor>(true);
+                foreach (var actor in actors)
+                {
+                    var symbol = actor.GetComponent<EnemySymbol>();
+                    if (symbol == null)
+                    {
+                        symbol = actor.gameObject.AddComponent<EnemySymbol>();
+                        symbol.Initialize(actor.SymbolId);
+                        attachedCount++;
+                        Debug.Log($"[ExplorationSceneBuilder] ➕ EnemySymbol 부착: {actor.gameObject.name} (ID: {symbol.EnemyID})");
+                    }
+                    else if (string.IsNullOrEmpty(symbol.EnemyID))
+                    {
+                        symbol.Initialize(actor.SymbolId);
+                    }
+                    EditorUtility.SetDirty(actor.gameObject);
+                }
+            }
+
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log($"[ExplorationSceneBuilder] ✅ 씬 '{scenePath}' 내 EnemySymbol 부착/ID 부여 완료 (부착 수: {attachedCount})");
+        }
+
         public static void BuildExplorationScene()
         {
             Debug.Log("==================================================");
@@ -121,16 +166,22 @@ namespace RPG25D.Editor
 
             var goblinSymGo = Create25DActor("Symbol_Goblin_01", new Vector3(-5f, 1f, 2f), goblinMat, false);
             goblinSymGo.transform.parent = symbolsRoot.transform;
+            var gobSymbol = goblinSymGo.AddComponent<EnemySymbol>();
+            gobSymbol.Initialize("Symbol_Goblin_01");
             var gobActor = goblinSymGo.AddComponent<EnemySymbolActor>();
             gobActor.Initialize(1, "고블린 정찰병", 1.4f, "Symbol_Goblin_01");
 
             var orcSymGo = Create25DActor("Symbol_Orc_02", new Vector3(5f, 1f, 3f), orcMat, false);
             orcSymGo.transform.parent = symbolsRoot.transform;
+            var orcSymbol = orcSymGo.AddComponent<EnemySymbol>();
+            orcSymbol.Initialize("Symbol_Orc_02");
             var orcActor = orcSymGo.AddComponent<EnemySymbolActor>();
             orcActor.Initialize(2, "오크 돌격병", 1.5f, "Symbol_Orc_02");
 
             var slimeSymGo = Create25DActor("Symbol_Slime_03", new Vector3(0f, 1f, 9f), slimeMat, false);
             slimeSymGo.transform.parent = symbolsRoot.transform;
+            var slimeSymbol = slimeSymGo.AddComponent<EnemySymbol>();
+            slimeSymbol.Initialize("Symbol_Slime_03");
             var slimeActor = slimeSymGo.AddComponent<EnemySymbolActor>();
             slimeActor.Initialize(3, "산성 슬라임", 1.3f, "Symbol_Slime_03");
 

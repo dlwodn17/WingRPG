@@ -18,6 +18,7 @@ namespace RPG25D.Gameplay.Exploration
         [Header("참조 설정")]
         [SerializeField] private ExplorationPlayerController _player;
         [SerializeField] private List<EnemySymbolActor> _symbols = new List<EnemySymbolActor>();
+        [SerializeField] private List<EnemySymbol> _enemySymbols = new List<EnemySymbol>();
 
         [Header("전투 전이 설정")]
         [SerializeField] private string _battleSceneName = "SampleScene";
@@ -29,6 +30,7 @@ namespace RPG25D.Gameplay.Exploration
 
         public IEncounterDetection DetectionModel => _detectionModel;
         public IReadOnlyList<EnemySymbolActor> Symbols => _symbols;
+        public IReadOnlyList<EnemySymbol> EnemySymbols => _enemySymbols;
         public bool IsEncounterTriggered => _isEncounterTriggered;
 
         public event Action<int> OnEncounterTriggered;
@@ -61,31 +63,45 @@ namespace RPG25D.Gameplay.Exploration
 
         public void CollectSymbolsInScene()
         {
-            var found = FindObjectsByType<EnemySymbolActor>(FindObjectsSortMode.None);
+            var foundActors = FindObjectsByType<EnemySymbolActor>(FindObjectsSortMode.None);
             _symbols.Clear();
-            _symbols.AddRange(found);
+            _symbols.AddRange(foundActors);
+
+            var foundSymbols = FindObjectsByType<EnemySymbol>(FindObjectsSortMode.None);
+            _enemySymbols.Clear();
+            _enemySymbols.AddRange(foundSymbols);
         }
 
         /// <summary>
-        /// [요구 산출물 4] GameManager의 DefeatedEnemyIDs를 조회하여 이미 처치된 적 심볼을 SetActive(false)로 비활성화합니다.
+        /// [세부 개발 명세 4] 탐색 씬 활성화 시 GameManagerData.IsEnemyDefeated 조건을 검사하여 처치된 적 심볼을 즉시 비활성화(SetActive(false))합니다.
         /// </summary>
         public void RefreshDefeatedSymbols()
         {
-            if (GameManager.Instance == null) return;
+            if (GameManagerData.Instance == null) return;
 
-            var defeatedList = GameManager.Instance.DefeatedEnemyIDs;
+            // 1. 모든 EnemySymbol 컴포넌트 검사 및 비활성화
+            foreach (var enemySymbol in _enemySymbols)
+            {
+                if (enemySymbol != null && enemySymbol.gameObject.activeSelf)
+                {
+                    if (GameManagerData.Instance.IsEnemyDefeated(enemySymbol.EnemyID))
+                    {
+                        enemySymbol.gameObject.SetActive(false);
+                        Debug.Log($"[EncounterManager] ❌ [EnemySymbol] 처치된 적 심볼 비활성화: {enemySymbol.EnemyID} ({enemySymbol.gameObject.name})");
+                    }
+                }
+            }
+
+            // 2. 모든 EnemySymbolActor 컴포넌트 검사 및 비활성화
             foreach (var symbol in _symbols)
             {
-                if (symbol != null)
+                if (symbol != null && symbol.gameObject.activeSelf)
                 {
-                    bool isDefeated = (defeatedList != null && defeatedList.Contains(symbol.SymbolId)) ||
-                                      GameManager.Instance.IsEncounterDefeated(symbol.SymbolId) ||
-                                      GameManager.Instance.IsEncounterDefeated(symbol.EncounterId);
-
-                    if (isDefeated)
+                    if (GameManagerData.Instance.IsEnemyDefeated(symbol.SymbolId) ||
+                        GameManagerData.Instance.IsEncounterDefeated(symbol.EncounterId))
                     {
                         symbol.gameObject.SetActive(false);
-                        Debug.Log($"[EncounterManager] ❌ 처치된 적 심볼 비활성화: {symbol.SymbolId} (ID: {symbol.EncounterId})");
+                        Debug.Log($"[EncounterManager] ❌ [EnemySymbolActor] 처치된 적 심볼 비활성화: {symbol.SymbolId} (ID: {symbol.EncounterId})");
                     }
                     else
                     {
@@ -144,12 +160,21 @@ namespace RPG25D.Gameplay.Exploration
             Debug.Log($"💥 [심볼 인카운터 발동!] 적 [{monsterName}] (ID: {encounterId}, SymbolId: {symbolId})과 충돌!");
             Debug.Log($"==================================================");
 
-            // 1. 플레이어 위치 및 인카운터 ID 저장
-            if (GameManager.Instance != null)
+            // 1. 플레이어 위치 및 인카운터 ID 저장 (세부 개발 명세 1 연동)
+            if (symbol != null)
+            {
+                var enemySymbol = symbol.GetComponent<EnemySymbol>();
+                if (enemySymbol != null)
+                {
+                    enemySymbol.EngageBattle();
+                }
+            }
+
+            if (GameManagerData.Instance != null)
             {
                 Vector3 playerPos = _player != null ? _player.transform.position : Vector3.zero;
-                GameManager.Instance.SavePlayerPosition(playerPos);
-                GameManager.Instance.CurrentEnemyID = symbolId;
+                GameManagerData.Instance.SavePlayerPosition(playerPos);
+                GameManagerData.Instance.CurrentEngagedEnemyID = symbolId;
             }
 
             // 2. 카메라 충격 셰이크 (존재 시)
