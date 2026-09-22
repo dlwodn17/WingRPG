@@ -65,6 +65,11 @@ namespace RPG25D.Data
         [Tooltip("처치 완료된 적 심볼 고유 ID 목록")]
         public List<string> DefeatedEnemyIDs = new List<string>();
 
+        [Header("인벤토리 및 파티 영속성 데이터 (세부 개발 명세 4)")]
+        [Tooltip("보유 캐릭터 인스턴스, 조각, 파티 슬롯 정보가 직렬화된 JSON 문자열")]
+        [TextArea(3, 10)]
+        public string SerializedUserData = string.Empty;
+
         [SerializeField] protected List<string> _triggeredEventIds = new List<string>();
 
         // 런타임 빠른 검색용 캐시
@@ -202,6 +207,7 @@ namespace RPG25D.Data
             _triggeredEventIds.Clear();
             _defeatedEncounterSet.Clear();
             _triggeredEventSet.Clear();
+            SerializedUserData = string.Empty;
             LastEncounterId = -1;
             IsInBattle = false;
             Debug.Log("[GameManagerData] 🔄 게임 진행 데이터 초기화 완료 (ResetProgress)");
