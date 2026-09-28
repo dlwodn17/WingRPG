@@ -66,9 +66,9 @@ namespace RPG25D.Gameplay
             if (customAllies != null && customAllies.Count > 0) _allyDataList = customAllies;
             if (customEnemies != null && customEnemies.Count > 0) _enemyDataList = customEnemies;
 
-            // 1. 아군 3인 생성
+            // 1. 아군 생성 (최대 4인)
             EnsureDefaultAllyData();
-            for (int i = 0; i < _allyDataList.Count && i < 3; i++)
+            for (int i = 0; i < _allyDataList.Count && i < 4; i++)
             {
                 var data = _allyDataList[i];
                 var actor = data.CreateActor(10 + i);
@@ -117,6 +117,36 @@ namespace RPG25D.Gameplay
         private void EnsureDefaultAllyData()
         {
             if (_allyDataList == null) _allyDataList = new List<CharacterDataSO>();
+
+            // 저장된 파티 편성 데이터가 있다면 우선 반영
+            if (_allyDataList.Count == 0 && PartyFormationManager.Instance != null)
+            {
+                var partyChars = PartyFormationManager.Instance.GetActivePartyCharacters();
+                if (partyChars != null && partyChars.Count > 0)
+                {
+                    foreach (var charInst in partyChars)
+                    {
+                        var data = ScriptableObject.CreateInstance<CharacterDataSO>();
+                        data.characterName = charInst.CharacterName;
+                        data.isPlayer = true;
+                        data.maxHP = 100 + charInst.Level * 10;
+                        data.baseAttack = charInst.CurrentAttack;
+                        data.speed = 10 + charInst.Rarity * 2;
+
+                        if (charInst.Saju != null)
+                        {
+                            data.themeColor = GachaVisualDirector.GetFiveElementColor(charInst.Saju.DayPillar.Stem);
+                        }
+                        else
+                        {
+                            data.themeColor = new Color(0.2f, 0.7f, 1.0f);
+                        }
+
+                        _allyDataList.Add(data);
+                    }
+                }
+            }
+
             while (_allyDataList.Count < 3)
             {
                 int idx = _allyDataList.Count + 1;

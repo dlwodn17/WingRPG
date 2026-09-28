@@ -90,6 +90,11 @@ namespace RPG25D.UI
 
             string info = $"  🧭 [필드 탐색 모드]   💰 골드: {gold} G   |   🎒 소지품: {itemsCount}개   |   ⚔️ 격파한 적: {defeated}마리";
             GUI.Box(new Rect(15, 15, 600, 36), info, _headerStyle);
+
+            if (GUI.Button(new Rect(625, 15, 190, 36), "🔮 사주 가챠 / 파티 편성"))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GachaScene");
+            }
         }
 
         private void DrawInteractionPrompt(string promptText)
