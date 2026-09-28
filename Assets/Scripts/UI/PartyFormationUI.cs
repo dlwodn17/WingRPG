@@ -26,11 +26,25 @@ namespace RPG25D.UI
     {
         [Header("연결 모달 및 디렉터")]
         [SerializeField] private CharacterDetailModal _detailModal;
+        [SerializeField] private WingEquipmentUI _wingEquipmentUI;
         [SerializeField] private GachaVisualDirector _gachaDirector;
 
         [Header("UI 활성화 상태")]
         [SerializeField] private bool _isOpen = false;
         public bool IsOpen => _isOpen;
+
+        public void OpenWingEquipmentUI(CharacterInstance ch)
+        {
+            if (ch == null) return;
+            if (_wingEquipmentUI == null) _wingEquipmentUI = FindAnyObjectByType<WingEquipmentUI>();
+            if (_wingEquipmentUI == null)
+            {
+                var go = new GameObject("WingEquipmentUI");
+                go.transform.SetParent(transform.parent, false);
+                _wingEquipmentUI = go.AddComponent<WingEquipmentUI>();
+            }
+            _wingEquipmentUI.Open(ch);
+        }
 
         private CharacterInventoryManager _inventory;
         private PartyFormationManager _partyManager;
@@ -433,6 +447,10 @@ namespace RPG25D.UI
                     {
                         if (_detailModal != null) _detailModal.Open(charInst);
                     }
+                    if (GUILayout.Button("🪽 날개", GUILayout.Width(62), GUILayout.Height(28)))
+                    {
+                        OpenWingEquipmentUI(charInst);
+                    }
                     if (GUILayout.Button("편성 해제", GUILayout.Height(28)))
                     {
                         PartyManager.RemoveFromSlot(i);
@@ -567,7 +585,12 @@ namespace RPG25D.UI
                 HandleCharacterCardClick(ch);
             }
 
-            if (GUILayout.Button("상세 (사주/스탯)", GUILayout.Height(26)))
+            if (GUILayout.Button("🪽 날개", GUILayout.Width(58), GUILayout.Height(26)))
+            {
+                OpenWingEquipmentUI(ch);
+            }
+
+            if (GUILayout.Button("상세 (사주)", GUILayout.Height(26)))
             {
                 if (_detailModal != null) _detailModal.Open(ch);
             }

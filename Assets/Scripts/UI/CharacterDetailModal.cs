@@ -21,6 +21,9 @@ namespace RPG25D.UI
         [SerializeField] private bool _isOpen = false;
         public bool IsOpen => _isOpen;
 
+        [Header("날개 장비 UI 연동")]
+        [SerializeField] private WingEquipmentUI _wingEquipmentUI;
+
         private CharacterInstance _currentCharacter;
         public CharacterInstance CurrentCharacter => _currentCharacter;
 
@@ -119,7 +122,7 @@ namespace RPG25D.UI
             string starStr = new string('★', _currentCharacter.Rarity);
             GUILayout.Label($"{starStr} {_currentCharacter.CharacterName}", _titleStyle);
             GUILayout.Space(5);
-            GUILayout.Label($"레벨: {_currentCharacter.Level}  |  초월: {_currentCharacter.Transcendence}단계  |  공격력: {_currentCharacter.CurrentAttack} (기본 {_currentCharacter.BaseAttack})", _subStyle);
+            GUILayout.Label($"레벨: {_currentCharacter.Level}  |  초월: {_currentCharacter.Transcendence}단계  |  공격력: {_currentCharacter.CurrentAttack} (기본 {_currentCharacter.BaseAttack} + 날개 보너스 +{_currentCharacter.TotalWingBonusDamage})", _subStyle);
 
             GUILayout.Space(25);
             GUILayout.Label("─── 고유 사주팔자(四柱八字) 명식 ───", _subStyle);
@@ -171,11 +174,29 @@ namespace RPG25D.UI
 
             GUILayout.FlexibleSpace();
 
-            // 3. 닫기 버튼
+            // 3. 하단 버튼 바: 날개 장비 관리 및 닫기
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("🪽 날개 장비 관리", _closeButtonStyle, GUILayout.Height(45)))
+            {
+                if (_wingEquipmentUI == null) _wingEquipmentUI = FindAnyObjectByType<WingEquipmentUI>();
+                if (_wingEquipmentUI == null)
+                {
+                    var go = new GameObject("WingEquipmentUI");
+                    go.transform.SetParent(transform.parent, false);
+                    _wingEquipmentUI = go.AddComponent<WingEquipmentUI>();
+                }
+                _wingEquipmentUI.Open(_currentCharacter);
+            }
+
+            GUILayout.Space(10);
+
             if (GUILayout.Button("확인 / 닫기", _closeButtonStyle, GUILayout.Height(45)))
             {
                 Close();
             }
+
+            GUILayout.EndHorizontal();
 
             GUILayout.EndArea();
 

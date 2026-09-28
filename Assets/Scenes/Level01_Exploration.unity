@@ -510,6 +510,7 @@ GameObject:
   m_Component:
   - component: {fileID: 689108610}
   - component: {fileID: 689108609}
+  - component: {fileID: 689108611}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -597,6 +598,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &689108611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689108608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &814477969
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,6 +741,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 814477969}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &850035608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 850035610}
+  - component: {fileID: 850035609}
+  m_Layer: 0
+  m_Name: WingEquipmentUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &850035609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850035608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad79a06ece8a6474a8f330da5f7c7b62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.UI.WingEquipmentUI
+  _selectionPopup: {fileID: 0}
+  _wingVisual: {fileID: 0}
+  _isOpen: 0
+--- !u!4 &850035610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850035608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &886336678
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,8 +853,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Visual.BillboardActor25D
   _lockYAxis: 1
-  _targetCamera: {fileID: 0}
-  _visualRoot: {fileID: 0}
+  _targetCamera: {fileID: 611081570}
+  _visualRoot: {fileID: 886336679}
   _hitShakeDuration: 0.2
 --- !u!65 &886336682
 BoxCollider:
@@ -1174,6 +1251,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170257049}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1219887174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1219887176}
+  - component: {fileID: 1219887175}
+  m_Layer: 0
+  m_Name: WingSelectionPopup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1219887175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219887174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c08cda2a65a5f6345bb4ba43408b17a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.UI.WingSelectionPopup
+  _isOpen: 0
+--- !u!4 &1219887176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219887174}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1230859269
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,8 +1605,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Visual.BillboardActor25D
   _lockYAxis: 1
-  _targetCamera: {fileID: 0}
-  _visualRoot: {fileID: 0}
+  _targetCamera: {fileID: 611081570}
+  _visualRoot: {fileID: 1566604146}
   _hitShakeDuration: 0.2
 --- !u!65 &1566604149
 BoxCollider:
@@ -1588,8 +1710,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Visual.BillboardActor25D
   _lockYAxis: 1
-  _targetCamera: {fileID: 0}
-  _visualRoot: {fileID: 0}
+  _targetCamera: {fileID: 611081570}
+  _visualRoot: {fileID: 1610375884}
   _hitShakeDuration: 0.2
 --- !u!65 &1610375888
 BoxCollider:
@@ -2104,6 +2226,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1861139458}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1909701937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1909701939}
+  - component: {fileID: 1909701938}
+  m_Layer: 0
+  m_Name: WingAcquisitionPopup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1909701938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909701937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fba34e091859cc4bb63261eae69a81d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.UI.WingAcquisitionPopup
+  _displayDuration: 3
+  _autoSubscribeToDropManager: 1
+--- !u!4 &1909701939
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909701937}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1922320647
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,8 +2756,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Visual.BillboardActor25D
   _lockYAxis: 1
-  _targetCamera: {fileID: 0}
-  _visualRoot: {fileID: 0}
+  _targetCamera: {fileID: 611081570}
+  _visualRoot: {fileID: 2103431881}
   _hitShakeDuration: 0.2
 --- !u!65 &2103431885
 BoxCollider:
@@ -2693,8 +2861,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RPG25D.Runtime::RPG25D.Visual.BillboardActor25D
   _lockYAxis: 1
-  _targetCamera: {fileID: 0}
-  _visualRoot: {fileID: 0}
+  _targetCamera: {fileID: 611081570}
+  _visualRoot: {fileID: 2139037152}
   _hitShakeDuration: 0.2
 --- !u!65 &2139037156
 BoxCollider:
@@ -2728,3 +2896,6 @@ SceneRoots:
   - {fileID: 260913792}
   - {fileID: 611081571}
   - {fileID: 2047930018}
+  - {fileID: 1909701939}
+  - {fileID: 1219887176}
+  - {fileID: 850035610}

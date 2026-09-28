@@ -237,6 +237,17 @@ namespace RPG25D.Gameplay
                 actorGo.transform.parent = _partyRootObject.transform;
                 _actorObjectMap[actor] = actorGo;
 
+                // 아군 장착 날개 비주얼 실시간 동기화
+                var wingVis = actorGo.GetComponent<CharacterWingVisual>();
+                if (wingVis != null && PartyFormationManager.Instance != null)
+                {
+                    var charInst = PartyFormationManager.Instance.GetCharacterInSlot(i);
+                    if (charInst != null)
+                    {
+                        wingVis.UpdateVisual(charInst);
+                    }
+                }
+
                 CreateTurnIndicator(actor, actorGo);
             }
 
@@ -273,6 +284,9 @@ namespace RPG25D.Gameplay
             mr.receiveShadows = true;
 
             root.AddComponent<BillboardActor25D>();
+            var wingVisual = root.AddComponent<CharacterWingVisual>();
+            wingVisual.EnsureWingHierarchy();
+
             return root;
         }
 

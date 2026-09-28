@@ -11,7 +11,7 @@ namespace RPG25D.Data
     /// 그리고 소환 시 8회 주사위로 각인된 고유 사주팔자(CharacterSaju)를 보유합니다.
     /// </summary>
     [Serializable]
-    public class CharacterInstance
+    public class CharacterInstance : ISerializationCallbackReceiver
     {
         [Tooltip("인스턴스 고유 식별자 (GUID)")]
         public string InstanceID;
@@ -37,6 +37,18 @@ namespace RPG25D.Data
         [Tooltip("소환 시 각인된 고유 사주팔자 명식 (四柱八字)")]
         public CharacterSaju Saju;
 
+        [SerializeField] private bool _hasMainLeft;
+        [SerializeField] private WingItemInstance _mainLeftWing;
+
+        [SerializeField] private bool _hasMainRight;
+        [SerializeField] private WingItemInstance _mainRightWing;
+
+        [SerializeField] private bool _hasSubLeft;
+        [SerializeField] private WingItemInstance _subLeftWing;
+
+        [SerializeField] private bool _hasSubRight;
+        [SerializeField] private WingItemInstance _subRightWing;
+
         /// <summary>
         /// [세부 개발 명세 3] 캐릭터 날개 장착 슬롯 4부위 (MainLeft, MainRight, SubLeft, SubRight)
         /// </summary>
@@ -47,6 +59,29 @@ namespace RPG25D.Data
             { WingSlotType.SubLeft, null },
             { WingSlotType.SubRight, null }
         };
+
+        public void OnBeforeSerialize()
+        {
+            _hasMainLeft = EquippedWings.TryGetValue(WingSlotType.MainLeft, out var ml) && ml != null;
+            _mainLeftWing = _hasMainLeft ? ml : null;
+
+            _hasMainRight = EquippedWings.TryGetValue(WingSlotType.MainRight, out var mr) && mr != null;
+            _mainRightWing = _hasMainRight ? mr : null;
+
+            _hasSubLeft = EquippedWings.TryGetValue(WingSlotType.SubLeft, out var sl) && sl != null;
+            _subLeftWing = _hasSubLeft ? sl : null;
+
+            _hasSubRight = EquippedWings.TryGetValue(WingSlotType.SubRight, out var sr) && sr != null;
+            _subRightWing = _hasSubRight ? sr : null;
+        }
+
+        public void OnAfterDeserialize()
+        {
+            EquippedWings[WingSlotType.MainLeft] = _hasMainLeft ? _mainLeftWing : null;
+            EquippedWings[WingSlotType.MainRight] = _hasMainRight ? _mainRightWing : null;
+            EquippedWings[WingSlotType.SubLeft] = _hasSubLeft ? _subLeftWing : null;
+            EquippedWings[WingSlotType.SubRight] = _hasSubRight ? _subRightWing : null;
+        }
 
         /// <summary>
         /// 장착된 4개 날개 슬롯 및 활성화된 세트 효과로부터 얻는 총 추가 공격력

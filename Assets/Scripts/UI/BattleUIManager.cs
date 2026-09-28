@@ -43,6 +43,17 @@ namespace RPG25D.UI
             {
                 _turnController.OnBattleLog += AddLog;
                 _turnController.OnStateChanged += HandleStateChanged;
+
+                // WingDropManager에 전투 컨트롤러 바인딩 (D20 1/20 주사위 극단값 드롭 연동)
+                RPG25D.Gameplay.WingDropManager.Instance.BindBattleTurnController(_turnController);
+            }
+
+            // 날개 획득 피드백 배너 팝업 자동 보장
+            if (WingAcquisitionPopup.Instance == null && FindAnyObjectByType<WingAcquisitionPopup>() == null)
+            {
+                var popupGo = new GameObject("WingAcquisitionPopup");
+                popupGo.transform.SetParent(transform.parent, false);
+                popupGo.AddComponent<WingAcquisitionPopup>();
             }
 
             var party = _turnController != null ? _turnController.Party : FindAnyObjectByType<PartyManager>();

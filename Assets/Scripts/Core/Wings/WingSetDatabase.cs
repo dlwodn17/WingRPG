@@ -67,6 +67,7 @@ namespace RPG25D.Core.Wings
             bool specialGimmick4pc = true)
         {
             var def = CreateInstance<WingSetDefinition>();
+            def.hideFlags = HideFlags.HideAndDontSave;
             def.SetID = setId;
             def.SetName = setName;
             def.BonusDamage2pc = bonusDamage2pc;
@@ -125,7 +126,11 @@ namespace RPG25D.Core.Wings
         public static WingSetDefinition GetSetDefinition(string setId)
         {
             if (string.IsNullOrEmpty(setId)) return null;
-            _setRegistry.TryGetValue(setId, out var def);
+            if (!_setRegistry.TryGetValue(setId, out var def) || def == null)
+            {
+                InitializeDefaultSets();
+                _setRegistry.TryGetValue(setId, out def);
+            }
             return def;
         }
 

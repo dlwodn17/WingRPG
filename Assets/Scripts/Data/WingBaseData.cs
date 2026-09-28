@@ -42,6 +42,13 @@ namespace RPG25D.Data
         [Tooltip("기본 공격력 가산치")]
         public int FlatBonusDamage = 15;
 
+        [Header("비주얼 스프라이트 & 아이콘")]
+        [Tooltip("2.5D 캐릭터 등 뒤에 렌더링될 날개 스프라이트")]
+        public Sprite WingSprite;
+
+        [Tooltip("UI 인벤토리 및 장착 슬롯에 표시될 아이콘")]
+        public Sprite WingIcon;
+
         /// <summary>
         /// 런타임 및 단위 테스트에서 메모리 상에 인스턴스를 즉시 생성하는 팩토리 메서드
         /// </summary>
@@ -51,7 +58,9 @@ namespace RPG25D.Data
             int rarity,
             WingSlotType targetSlot,
             string setId = "",
-            int flatBonusDamage = 15)
+            int flatBonusDamage = 15,
+            Sprite wingSprite = null,
+            Sprite wingIcon = null)
         {
             var data = CreateInstance<WingBaseData>();
             data.WingID = id;
@@ -60,6 +69,8 @@ namespace RPG25D.Data
             data.TargetSlot = targetSlot;
             data.SetID = setId ?? string.Empty;
             data.FlatBonusDamage = flatBonusDamage;
+            data.WingSprite = wingSprite;
+            data.WingIcon = wingIcon;
             return data;
         }
 

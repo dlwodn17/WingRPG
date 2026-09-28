@@ -37,6 +37,7 @@ namespace RPG25D.Data
         public List<ShardSaveEntry> Shards = new List<ShardSaveEntry>();
         public string[] PartySlotInstanceIDs = new string[PartyFormationManager.PartySlotCount];
         public List<string> AcquisitionOrder = new List<string>();
+        public List<WingItemInstance> OwnedWings = new List<WingItemInstance>();
     }
 
     /// <summary>
@@ -97,6 +98,12 @@ namespace RPG25D.Data
                 {
                     saveData.PartySlotInstanceIDs[i] = partyManager.ActivePartySlotInstanceIDs[i];
                 }
+            }
+
+            // 4. 날개 인벤토리 직렬화
+            if (RPG25D.Core.Wings.WingInventoryManager.Instance != null)
+            {
+                saveData.OwnedWings.AddRange(RPG25D.Core.Wings.WingInventoryManager.Instance.OwnedWings);
             }
 
             return JsonUtility.ToJson(saveData, prettyPrint);
@@ -194,9 +201,24 @@ namespace RPG25D.Data
                 }
             }
 
+            // 4. 날개 인벤토리 복원
+            if (RPG25D.Core.Wings.WingInventoryManager.Instance != null && data.OwnedWings != null)
+            {
+                var wingInv = RPG25D.Core.Wings.WingInventoryManager.Instance;
+                wingInv.Clear();
+                foreach (var wing in data.OwnedWings)
+                {
+                    if (wing != null)
+                    {
+                        wingInv.AddWing(wing);
+                    }
+                }
+            }
+
             Debug.Log($"[UserDataPersistence] 🔄 유저 데이터 복원 완료: 캐릭터 {inventory?.TotalCharacterCount ?? 0}명, " +
                       $"샤드 항목 {duplicateHandler?.CharacterShards.Count ?? 0}개, " +
-                      $"파티원 {partyManager?.ActiveMemberCount ?? 0}명");
+                      $"파티원 {partyManager?.ActiveMemberCount ?? 0}명, " +
+                      $"보유 날개 {data.OwnedWings?.Count ?? 0}개");
         }
 
         #region PlayerPrefs 저장/로드
